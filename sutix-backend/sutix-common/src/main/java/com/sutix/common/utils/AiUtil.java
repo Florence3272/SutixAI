@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * DeepLX 翻译工具类
- * 遵循 DeepLX API 规范，提供简洁、健壮的翻译接口
+ * 遵循 DeepLX API 规范，提供简洁、健壮的
  */
 public class AiUtil {
     // ===================== 可配置参数（建议抽离到配置文件）=====================
