@@ -1,4 +1,5 @@
 <template>
+<Header />
   <div class="home">
     <!-- 全屏Banner -->
     <div class="banner">
@@ -146,6 +147,8 @@
 </template>
 
 <script setup>
+import Header from '@/components/Header.vue'
+
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
