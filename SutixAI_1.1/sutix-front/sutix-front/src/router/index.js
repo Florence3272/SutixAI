@@ -18,6 +18,13 @@ const routes = [
         component: () => import('@/pages/user/Login.vue')
       },
       {
+        // 修复点1：子路由不能以/开头
+        path: 'category/:categoryId', 
+        name: 'CategoryDatabase',
+        // 修复点2：添加懒加载导入（与其他路由保持一致）
+        component: () => import('@/pages/user/CategoryDatabase.vue')
+      },
+      {
         path: 'term-list',
         name: 'TermList',
         component: () => import('@/pages/user/TermList.vue')
