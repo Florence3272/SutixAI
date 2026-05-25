@@ -1,78 +1,37 @@
-# Sutix 术语AI平台（中-俄）
+my-term-app/         项目根目录（所有命令必须在这里执行）
+├── src/              核心源码（所有页面、组件、配置都在这里）
+│   ├── App.vue       项目根组件（所有页面的入口）
+│   ├── main.js       项目入口文件（加载插件、启动项目）
+│   ├── router/       路由（页面跳转管理）
+│   │   └── index.js
+│   ├── pages/        所有页面
+│   │   └── user/     用户端页面
+│   │       ├── Home.vue      首页
+│   │       └── Login.vue     登录页
+│   ├── layouts/      布局组件
+│   │   ├── UserLayout.vue    用户端公共布局（导航栏等）
+│   │   └── AdminLayout.vue   管理端公共布局
+│   └── store/        状态管理（用户信息、全局配置）
+│       └── user.js
+├── package.json      项目配置文件
+└── vite.config.js    Vite 配置
 
-&gt; 面向中俄工程领域的智能术语管理与翻译平台，集成术语库、语料库、实时翻译、文档翻译及AI学习功能。
-
----
-
-## 📋 项目简介
-
-Sutix 术语AI平台是一款专注于**中俄双语工程术语**的智能化管理与翻译系统。平台覆盖工业工程、化工厂、炼油厂等专业领域，通过术语库与AI翻译引擎的深度结合，为企业和个人提供精准、高效的中俄互译服务。
-
----
-
-## ✨ 核心功能
-
-### 1. 术语库
-- 中俄对照术语列表，支持术语的**查询、更新、新增**
-- 二级分类体系：工业工程、化工厂、炼油厂等（后台可动态扩展）
-- 后台批量上传术语（中/英/俄三语）
-- 开放API接口，支持第三方平台集成
-
-### 2. 语料库
-- 按专业分类提供中俄双语**工程法律、法规、技术规范**
-- 支持关键词搜索与历史搜索记录
-- 在线查看文档内容，保留原始格式
-
-### 3. 实时文字翻译
-- 线上聊天窗口，支持即时文字沟通
-- 集成 DeepSeek 等AI翻译引擎
-- **术语优先**：遇到术语时，优先采用平台术语库的标准译法
-
-### 4. 文档翻译
-- 支持多种格式文档上传（拖拽上传）
-- 翻译后**保留原始排版和格式**
-- 在线预览翻译结果
-- **术语一致性校验**：若翻译与平台术语库不一致，自动标红并支持一键替换为标准译法
-
-### 5. 视频学习
-- 分类体系：基础俄语、专业俄语、基础汉语、专业汉语
-- 视频关联相关术语，点击可查看术语详情
-- 支持小喇叭播放术语读音
-
-### 6. 用户体系
-- 手机号注册/登录（验证码+密码）
-- 个人信息管理（头像、昵称、密码修改）
-- 学习记录追踪
-
----
-
-## 🏗️ 系统架构
-
----
-
-## 🚀 快速开始
-
-### 环境要求
-- JDK 17+
-- Node.js 18+
-- MySQL 8.0+
-- Redis 6.0+
-
-### 安装步骤
-
-```bash
-# 1. 克隆项目
-git clone https://github.com/Florence3272/SutixAI.git
-cd SutixAI
-
-# 2. 初始化数据库
-mysql -u root -p < sql/init.sql
-
-# 3. 启动后端服务
-cd backend
-./mvnw spring-boot:run
-
-# 4. 启动前端服务
-cd ../frontend
-npm install
+cd ~/Desktop/my-term-app
 npm run dev
+
+
+# 安装依赖（第一次 / 新增插件时用）
+npm install
+npm install vue-router@4 element-plus pinia
+
+# Vue 3 + Vite
+
+This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+
+Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+
+# 登录页面首栏
+第一步：在 <template> 最顶部 写上
+<Header />
+第二步：在 <script setup> 里面 引入
+import Header from '@/components/Header.vue'
