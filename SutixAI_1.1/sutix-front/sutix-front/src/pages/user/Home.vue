@@ -2,7 +2,7 @@
 <Header />
   <div class="home">
     <!-- 全屏Banner -->
-    <div class="banner">
+    <div class="banner" :style="{backgroundImage: `url(${bannerImg})`}">
       <div class="banner-overlay"></div>
       <div class="banner-content">
         <h1>📚 中-俄 专业术语库平台</h1>
@@ -31,10 +31,79 @@
       </div>
     </div>
 
-    <!-- 精选中俄术语卡片区 -->
+
+    <!-- 平台功能入口 -->
     <div class="section">
       <div class="section-title">
         <span class="num">01</span>
+        <span>平台功能导航</span>
+      </div>
+      <div class="module-grid">
+        <div class="module-card" @click="$router.push('/term-list')">
+          <div class="card-icon">📖</div>
+          <div class="card-title">总术语库管理</div>
+          <div class="card-desc">所有分类术语统一管理、批量操作</div>
+        </div>
+        <div class="module-card" @click="$router.push('/term-study')">
+          <div class="card-icon">🎓</div>
+          <div class="card-title">综合术语学习</div>
+          <div class="card-desc">跨分类卡片翻转记忆，中俄对照背诵</div>
+        </div>
+        <div class="module-card disabled">
+          <div class="card-icon">📄</div>
+          <div class="card-title">语料库</div>
+          <div class="card-desc">中俄专业语料查询（开发中）</div>
+          <el-tag size="small" type="info" class="mt-2">即将上线</el-tag>
+        </div>
+        <div class="module-card disabled">
+          <div class="card-icon">🔄</div>
+          <div class="card-title">在线翻译</div>
+          <div class="card-desc">术语优先智能翻译（开发中）</div>
+          <el-tag size="small" type="info" class="mt-2">即将上线</el-tag>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- 专业分类数据库展示区 -->
+    <div class="section category-section">
+      <div class="section-title">
+        <span class="num">02</span>
+        <span>专业分类数据库</span>
+      </div>
+      
+      <div class="category-grid">
+        <div
+          v-for="(category, index) in categoryList"
+          :key="index"
+          class="category-card"
+          @click="goToCategoryDatabase(category.id)"
+          :style="{ borderColor: category.color + '33' }"
+        >
+          <!-- 图标圆形背景 -->
+          <div class="category-icon-wrap" :style="{ background: category.color + '22' }">
+            <div class="category-icon" :style="{ color: category.color }">{{ category.icon }}</div>
+          </div>
+
+          <div class="category-title">{{ category.name }}</div>
+          
+          <div class="category-count" :style="{ color: category.color }">
+            收录 {{ category.termCount }} 条
+          </div>
+          
+          <div class="category-desc">{{ category.description }}</div>
+          
+          <el-button type="primary" size="small" class="enter-btn" :style="{ background: category.color, borderColor: category.color }">
+            进入数据库
+          </el-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 精选中俄术语卡片区 -->
+    <div class="section">
+      <div class="section-title">
+        <span class="num">03</span>
         <span>精选中俄术语</span>
       </div>
       
@@ -87,67 +156,11 @@
       </div>
     </div>
 
-    <!-- 专业分类数据库展示区（核心修改：跳转至独立分库） -->
-    <div class="section category-section">
-      <div class="section-title">
-        <span class="num">02</span>
-        <span>专业分类数据库</span>
-      </div>
-      
-      <div class="category-grid">
-        <div
-          v-for="(category, index) in categoryList"
-          :key="index"
-          class="category-card"
-          @click="goToCategoryDatabase(category.id)"
-        >
-          <div class="category-icon">{{ category.icon }}</div>
-          <div class="category-title">{{ category.name }}</div>
-          <div class="category-count">收录术语：{{ category.termCount }} 条</div>
-          <div class="category-desc">{{ category.description }}</div>
-          <el-button type="primary" size="small" class="enter-btn">
-            进入数据库
-          </el-button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 平台功能入口 -->
-    <div class="section">
-      <div class="section-title">
-        <span class="num">03</span>
-        <span>平台功能导航</span>
-      </div>
-      <div class="module-grid">
-        <div class="module-card" @click="$router.push('/term-list')">
-          <div class="card-icon">📖</div>
-          <div class="card-title">总术语库管理</div>
-          <div class="card-desc">所有分类术语统一管理、批量操作</div>
-        </div>
-        <div class="module-card" @click="$router.push('/term-study')">
-          <div class="card-icon">🎓</div>
-          <div class="card-title">综合术语学习</div>
-          <div class="card-desc">跨分类卡片翻转记忆，中俄对照背诵</div>
-        </div>
-        <div class="module-card disabled">
-          <div class="card-icon">📄</div>
-          <div class="card-title">语料库</div>
-          <div class="card-desc">中俄专业语料查询（开发中）</div>
-          <el-tag size="small" type="info" class="mt-2">即将上线</el-tag>
-        </div>
-        <div class="module-card disabled">
-          <div class="card-icon">🔄</div>
-          <div class="card-title">在线翻译</div>
-          <div class="card-desc">术语优先智能翻译（开发中）</div>
-          <el-tag size="small" type="info" class="mt-2">即将上线</el-tag>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script setup>
 import Header from '@/components/Header.vue'
+import bannerImg from '@/img/500d20e282f6d5ed4029532465757cd1.jpg'
 
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -160,20 +173,20 @@ const startIndex = ref(0)
 const searchLoading = ref(false)
 const isAnimating = ref(false)
 
-// 分类数据库列表（可直接在此添加/修改你的十几个分类）
+// 【升级】每个分类自带专属颜色
 const categoryList = ref([
-  { id: 'mechanical', name: '机械工程', icon: '⚙️', termCount: 1256, description: '机械设计、制造、自动化相关术语' },
-  { id: 'electrical', name: '电气工程', icon: '⚡', termCount: 987, description: '电力系统、电子技术、自动化控制' },
-  { id: 'chemical', name: '化学化工', icon: '🧪', termCount: 1542, description: '有机化学、无机化学、化工工艺' },
-  { id: 'medical', name: '医药卫生', icon: '💊', termCount: 2103, description: '临床医学、药学、生物医学' },
-  { id: 'computer', name: '计算机科学', icon: '💻', termCount: 1876, description: '软件开发、人工智能、网络技术' },
-  { id: 'construction', name: '建筑工程', icon: '🏗️', termCount: 1123, description: '建筑设计、结构工程、施工技术' },
-  { id: 'transport', name: '交通运输', icon: '🚄', termCount: 865, description: '铁路、公路、航空、水运术语' },
-  { id: 'energy', name: '能源动力', icon: '🔋', termCount: 742, description: '石油、天然气、新能源技术' },
-  { id: 'legal', name: '法律法务', icon: '⚖️', termCount: 654, description: '中俄法律、合同、商务法务' },
-  { id: 'economic', name: '经济贸易', icon: '💰', termCount: 921, description: '国际贸易、金融、市场营销' },
-  { id: 'agricultural', name: '农业科学', icon: '🌾', termCount: 587, description: '农学、畜牧、林业、渔业' },
-  { id: 'environmental', name: '环境科学', icon: '🌍', termCount: 432, description: '环境保护、生态工程、污染治理' }
+  { id: 'mechanical', name: '机械工程', icon: '⚙️', color: '#409eff', termCount: 1256, description: '机械设计、制造、自动化相关术语' },
+  { id: 'electrical', name: '电气工程', icon: '⚡', color: '#e6a23c', termCount: 987, description: '电力系统、电子技术、自动化控制' },
+  { id: 'chemical', name: '化学化工', icon: '🧪', color: '#67c23a', termCount: 1542, description: '有机化学、无机化学、化工工艺' },
+  { id: 'medical', name: '医药卫生', icon: '💊', color: '#f56c6c', termCount: 2103, description: '临床医学、药学、生物医学' },
+  { id: 'computer', name: '计算机科学', icon: '💻', color: '#8e44ad', termCount: 1876, description: '软件开发、人工智能、网络技术' },
+  { id: 'construction', name: '建筑工程', icon: '🏗️', color: '#d35400', termCount: 1123, description: '建筑设计、结构工程、施工技术' },
+  { id: 'transport', name: '交通运输', icon: '🚄', color: '#2c3e50', termCount: 865, description: '铁路、公路、航空、水运术语' },
+  { id: 'energy', name: '能源动力', icon: '🔋', color: '#27ae60', termCount: 742, description: '石油、天然气、新能源技术' },
+  { id: 'legal', name: '法律法务', icon: '⚖️', color: '#7f8c8d', termCount: 654, description: '中俄法律、合同、商务法务' },
+  { id: 'economic', name: '经济贸易', icon: '💰', color: '#f39c12', termCount: 921, description: '国际贸易、金融、市场营销' },
+  { id: 'agricultural', name: '农业科学', icon: '🌾', color: '#2ecc71', termCount: 587, description: '农学、畜牧、林业、渔业' },
+  { id: 'environmental', name: '环境科学', icon: '🌍', color: '#3498db', termCount: 432, description: '环境保护、生态工程、污染治理' }
 ])
 
 // 每页展示4张中俄术语卡片
@@ -192,14 +205,13 @@ const currentPage = computed(() => {
   return Math.floor(startIndex.value / 4)
 })
 
-// 读取本地中俄术语数据（精选术语来自各分类随机抽取）
+// 读取本地中俄术语数据
 const loadTerms = () => {
   try {
     const data = localStorage.getItem('sutix-term-list')
     if (data) {
       allTerms.value = JSON.parse(data)
     } else {
-      // 初始化示例数据（实际项目中从各分类数据库抽取）
       const sampleTerms = [
         { name: '人工智能', ruName: 'Искусственный интеллект', category: 'computer' },
         { name: '机器学习', ruName: 'Машинное обучение', category: 'computer' },
@@ -222,91 +234,55 @@ const loadTerms = () => {
 // 上一组
 const prevTerm = () => {
   if (isAnimating.value) return
-  
   isAnimating.value = true
-  if (startIndex.value > 0) {
-    startIndex.value -= 4
-  } else {
-    startIndex.value = Math.max(0, allTerms.value.length - 4)
-  }
-  
-  setTimeout(() => {
-    isAnimating.value = false
-  }, 300)
+  startIndex.value = startIndex.value > 0 ? startIndex.value - 4 : Math.max(0, allTerms.value.length - 4)
+  setTimeout(() => isAnimating.value = false, 300)
 }
 
 // 下一组
 const nextTerm = () => {
   if (isAnimating.value) return
-  
   isAnimating.value = true
-  if (startIndex.value + 4 < allTerms.value.length) {
-    startIndex.value += 4
-  } else {
-    startIndex.value = 0
-  }
-  
-  setTimeout(() => {
-    isAnimating.value = false
-  }, 300)
+  startIndex.value = startIndex.value + 4 < allTerms.value.length ? startIndex.value + 4 : 0
+  setTimeout(() => isAnimating.value = false, 300)
 }
 
 // 跳转到指定页
 const goToPage = (pageIndex) => {
   if (isAnimating.value || pageIndex === currentPage.value) return
-  
   isAnimating.value = true
   startIndex.value = pageIndex * 4
-  
-  setTimeout(() => {
-    isAnimating.value = false
-  }, 300)
+  setTimeout(() => isAnimating.value = false, 300)
 }
 
-// 跳转到术语详情页
+// 术语详情
 const goToTermDetail = (index) => {
   router.push(`/term-detail?index=${index}`)
 }
 
-// 核心修改：跳转到独立的分类数据库页面
+// 进入分类数据库
 const goToCategoryDatabase = (categoryId) => {
-  router.push({
-    path: `/category/${categoryId}`
-  })
+  router.push({ path: `/category/${categoryId}` })
 }
 
-// 首页搜索跳转（全站搜索）
+// 搜索
 const handleSearch = () => {
-  if (!searchText.value.trim()) {
-    ElMessage.warning('请输入搜索内容')
-    return
-  }
-  
+  if (!searchText.value.trim()) return ElMessage.warning('请输入搜索内容')
   searchLoading.value = true
-  
   setTimeout(() => {
     searchLoading.value = false
-    router.push({
-      path: '/term-list',
-      query: { search: searchText.value.trim() }
-    })
+    router.push({ path: '/term-list', query: { search: searchText.value.trim() } })
   }, 500)
 }
 
-onMounted(() => {
-  loadTerms()
-})
+onMounted(() => loadTerms())
 
-watch(
-  () => allTerms.value.length,
-  (newLength) => {
-    if (startIndex.value >= newLength && newLength > 0) {
-      startIndex.value = Math.max(0, newLength - 4)
-    }
+watch(() => allTerms.value.length, (newLength) => {
+  if (startIndex.value >= newLength && newLength > 0) {
+    startIndex.value = Math.max(0, newLength - 4)
   }
-)
+})
 </script>
-
 
 <style scoped>
 .home {
@@ -315,14 +291,15 @@ watch(
   background-color: #f5f7fa;
 }
 
-/* 顶部大图Banner */
+/* Banner */
 .banner {
   position: relative;
   width: 100%;
   height: 400px;
-  background: url('https://picsum.photos/1920/400?random=10') center/cover no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
-
 .banner-overlay {
   position: absolute;
   top: 0;
@@ -331,7 +308,6 @@ watch(
   height: 100%;
   background: rgba(0, 0, 0, 0.55);
 }
-
 .banner-content {
   position: relative;
   z-index: 1;
@@ -339,13 +315,11 @@ watch(
   padding: 120px 20px 0;
   color: #fff;
 }
-
 .banner-content h1 {
   font-size: 40px;
   margin-bottom: 15px;
   letter-spacing: 4px;
 }
-
 .banner-content p {
   font-size: 18px;
   opacity: 0.9;
@@ -353,13 +327,12 @@ watch(
   letter-spacing: 2px;
 }
 
-/* 通用区块样式 */
+/* 区块 */
 .section {
   max-width: 1200px;
   margin: 60px auto;
   padding: 0 20px;
 }
-
 .section-title {
   display: flex;
   align-items: center;
@@ -368,7 +341,6 @@ watch(
   margin-bottom: 30px;
   color: #333;
 }
-
 .section-title .num {
   background: #409eff;
   color: #fff;
@@ -382,7 +354,7 @@ watch(
   margin-right: 12px;
 }
 
-/* 空数据状态 */
+/* 空状态 */
 .empty-state {
   text-align: center;
   padding: 60px 0;
@@ -391,28 +363,19 @@ watch(
   box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
 
-/* 术语卡片轮播容器 */
+/* 轮播 */
 .carousel-container {
   position: relative;
   padding: 0 40px 40px;
 }
-
 .arrow-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
 }
-
-.arrow-btn.left {
-  left: 0;
-}
-
-.arrow-btn.right {
-  right: 0;
-}
-
-/* 轮播指示器 */
+.arrow-btn.left { left: 0; }
+.arrow-btn.right { right: 0; }
 .carousel-indicators {
   position: absolute;
   bottom: 0;
@@ -421,7 +384,6 @@ watch(
   display: flex;
   gap: 8px;
 }
-
 .indicator-dot {
   width: 8px;
   height: 8px;
@@ -430,25 +392,20 @@ watch(
   cursor: pointer;
   transition: all 0.3s;
 }
-
 .indicator-dot.active {
   width: 24px;
   border-radius: 4px;
   background: #409eff;
 }
 
-/* 中俄术语卡片网格 */
+/* 术语卡片 */
 .term-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
   transition: opacity 0.3s ease;
 }
-
-.term-grid.fade-enter {
-  opacity: 0;
-}
-
+.term-grid.fade-enter { opacity: 0; }
 .term-card {
   background: #fff;
   border: 1px solid #eee;
@@ -459,95 +416,93 @@ watch(
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
-
 .term-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 8px 24px rgba(64,158,255,0.15);
   border-color: #409eff;
 }
+.zh { font-size: 22px; font-weight: bold; color: #333; margin-bottom: 12px; }
+.ru { font-size: 16px; color: #666; line-height: 1.4; }
 
-/* 中俄文字样式 */
-.zh {
-  font-size: 22px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 12px;
-}
-
-.ru {
-  font-size: 16px;
-  color: #666;
-  line-height: 1.4;
-}
-
-/* 分类数据库样式（核心新增） */
+/* ====================================== */
+/* 【高颜值升级】专业分类卡片样式 */
+/* ====================================== */
 .category-section {
-  background: #fff;
-  padding: 40px 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  
+  padding: 50px 35px;
+  border-radius: 16px;
+  box-shadow: 0 3px 20px rgba(0,0,0,0.06);
 }
-
 .category-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 }
-
 .category-card {
-  border: 1px solid #eee;
-  border-radius: 10px;
-  padding: 24px 20px;
+  position: relative;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #eee;
+  border-radius: 16px;
+  padding: 30px 24px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.35s ease;
   cursor: pointer;
+  background: #fff;
 }
-
 .category-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(64,158,255,0.12);
-  border-color: #409eff;
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
 }
 
+/* 图标容器 */
+.category-icon-wrap {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .category-icon {
-  font-size: 42px;
-  margin-bottom: 16px;
+  font-size: 36px;
 }
 
+/* 文字 */
 .category-title {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
+  font-size: 19px;
+  font-weight: 600;
+  color: #2c3e50;
   margin-bottom: 8px;
 }
-
 .category-count {
   font-size: 14px;
-  color: #409eff;
+  font-weight: 600;
   margin-bottom: 12px;
+}
+.category-desc {
+  font-size: 13px;
+  color: #7f8c8d;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  min-height: 38px;
+}
+
+/* 按钮 */
+.enter-btn {
+  border-radius: 8px;
+  height: 34px;
+  font-size: 13px;
   font-weight: 500;
 }
 
-.category-desc {
-  font-size: 13px;
-  color: #666;
-  line-height: 1.5;
-  margin-bottom: 16px;
-  height: 39px;
-  overflow: hidden;
-}
-
-.enter-btn {
-  width: 100%;
-}
-
-/* 功能模块网格 */
+/* 功能模块 */
 .module-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
-
 .module-card {
   background: #fff;
   padding: 30px 20px;
@@ -557,92 +512,31 @@ watch(
   cursor: pointer;
   transition: all 0.3s;
 }
-
 .module-card:hover:not(.disabled) {
   transform: translateY(-5px);
   box-shadow: 0 8px 24px rgba(64,158,255,0.15);
 }
-
 .module-card.disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
+.card-icon { font-size: 36px; margin-bottom: 15px; }
+.card-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+.card-desc { color: #666; font-size: 14px; line-height: 1.6; }
 
-.card-icon {
-  font-size: 36px;
-  margin-bottom: 15px;
-}
-
-.card-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.card-desc {
-  color: #666;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-/* 响应式设计 */
+/* 响应式 */
 @media (max-width: 1200px) {
-  .category-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  .category-grid { grid-template-columns: repeat(3, 1fr); }
 }
-
 @media (max-width: 1024px) {
-  .term-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .category-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .module-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .term-grid { grid-template-columns: repeat(2, 1fr); }
+  .category-grid { grid-template-columns: repeat(2, 1fr); }
+  .module-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
 @media (max-width: 768px) {
-  .banner {
-    height: 350px;
-  }
-  
-  .banner-content {
-    padding-top: 100px;
-  }
-  
-  .banner-content h1 {
-    font-size: 28px;
-    letter-spacing: 2px;
-  }
-  
-  .banner-content p {
-    font-size: 16px;
-    letter-spacing: 1px;
-  }
-  
-  .section {
-    margin: 40px auto;
-  }
-  
-  .term-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .category-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .module-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .carousel-container {
-    padding: 0 30px 40px;
-  }
+  .banner { height: 350px; }
+  .banner-content { padding-top: 100px; }
+  .banner-content h1 { font-size: 28px; }
+  .term-grid, .category-grid, .module-grid { grid-template-columns: 1fr; }
 }
 </style>
