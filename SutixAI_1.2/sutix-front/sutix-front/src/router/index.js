@@ -18,16 +18,16 @@ const routes = [
         component: () => import('@/pages/user/Login.vue')
       },
       {
+        path: 'term-list',
+        name: 'TermList',
+        component: () => import('@/pages/user/TermList.vue')
+      },
+      {
         // 修复点1：子路由不能以/开头
         path: 'category/:categoryId', 
         name: 'CategoryDatabase',
         // 修复点2：添加懒加载导入（与其他路由保持一致）
         component: () => import('@/pages/user/CategoryDatabase.vue')
-      },
-      {
-        path: 'term-list',
-        name: 'TermList',
-        component: () => import('@/pages/user/TermList.vue')
       },
       {
         path: 'term-detail',
@@ -38,7 +38,15 @@ const routes = [
         path: 'term-study',
         name: 'TermStudy',
         component: () => import('@/pages/user/TermStudy.vue')
-      }
+      },{
+        path: '/corpus-compare',
+        name: 'CorpusCompare',
+        component: () => import('@/pages/user/CorpusCompare.vue'),
+        meta: { title: '中俄双语语料库' }
+      },{
+        path: 'translator',
+        name: 'Translator', 
+        component: () => import('@/pages/user/Translator.vue') }
     ]
   }
 ]
@@ -47,10 +55,21 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
-
-// 全局守卫：无条件放行所有页面
+// 登录拦截：未登录只能进 login
 router.beforeEach((to, from, next) => {
-  next() // 不校验、不跳转、直接过
+  const user = localStorage.getItem('userInfo')
+  // 如果去登录页 → 放行
+  if (to.path === '/login') {
+    next()
+  }
+  // 没登录 → 强制去登录
+  else if (!user) {
+    next('/login')
+  }
+  // 已登录 → 正常访问
+  else {
+    next()
+  }
 })
 
 export default router
