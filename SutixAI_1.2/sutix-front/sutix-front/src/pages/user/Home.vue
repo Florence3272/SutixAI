@@ -16,6 +16,7 @@
             style="width: 100%; max-width: 520px"
             @keyup.enter="handleSearch"
             clearable
+            prefix-icon="el-icon-search"
           >
             <template #append>
               <el-button 
@@ -49,23 +50,21 @@
           <div class="card-title">综合术语学习</div>
           <div class="card-desc">跨分类卡片翻转记忆，中俄对照背诵</div>
         </div>
-        <div class="module-card disabled">
+        <!-- 语料库：已改为可点击，跳转到CorpusCompare -->
+        <div class="module-card" @click="$router.push('/corpus-compare')">
           <div class="card-icon">📄</div>
           <div class="card-title">语料库</div>
-          <div class="card-desc">中俄专业语料查询（开发中）</div>
-          <el-tag size="small" type="info" class="mt-2">即将上线</el-tag>
+          <div class="card-desc">中俄专业语料对照查询</div>
         </div>
-        <div class="module-card disabled">
+        <div class="module-card" @click="$router.push('/translator')">
           <div class="card-icon">🔄</div>
           <div class="card-title">在线翻译</div>
-          <div class="card-desc">术语优先智能翻译（开发中）</div>
-          <el-tag size="small" type="info" class="mt-2">即将上线</el-tag>
+          <div class="card-desc">术语优先智能翻译</div>
         </div>
       </div>
     </div>
-  </div>
 
-    <!-- 专业分类数据库展示区 -->
+    <!-- 专业分类数据库展示区（已压缩高度，更紧凑） -->
     <div class="section category-section">
       <div class="section-title">
         <span class="num">02</span>
@@ -85,12 +84,15 @@
             <div class="category-icon" :style="{ color: category.color }">{{ category.icon }}</div>
           </div>
 
-          <div class="category-title">{{ category.name }}</div>
-
-          <div class="category-desc">{{ category.description }}</div>
+          <div class="category-info">
+            <div class="category-title">{{ category.name }}</div>
+            <div class="category-count" :style="{ color: category.color }">
+              收录 {{ category.termCount }} 条
+            </div>
+          </div>
           
           <el-button type="primary" size="small" class="enter-btn" :style="{ background: category.color, borderColor: category.color }">
-            进入数据库
+            进入
           </el-button>
         </div>
       </div>
@@ -151,7 +153,7 @@
         </div>
       </div>
     </div>
-
+  </div>
 </template>
 
 <script setup>
@@ -171,18 +173,18 @@ const isAnimating = ref(false)
 
 // 【升级】每个分类自带专属颜色
 const categoryList = ref([
-  { id: 'mechanical', name: '机械工程', icon: '⚙️', color: '#409eff',  description: '机械设计、制造、自动化相关术语' },
-  { id: 'electrical', name: '电气工程', icon: '⚡', color: '#e6a23c',  description: '电力系统、电子技术、自动化控制' },
-  { id: 'chemical', name: '化学化工', icon: '🧪', color: '#67c23a',  description: '有机化学、无机化学、化工工艺' },
-  { id: 'medical', name: '医药卫生', icon: '💊', color: '#f56c6c',  description: '临床医学、药学、生物医学' },
-  { id: 'computer', name: '计算机科学', icon: '💻', color: '#8e44ad',  description: '软件开发、人工智能、网络技术' },
-  { id: 'construction', name: '建筑工程', icon: '🏗️', color: '#d35400',  description: '建筑设计、结构工程、施工技术' },
-  { id: 'transport', name: '交通运输', icon: '🚄', color: '#2c3e50',  description: '铁路、公路、航空、水运术语' },
-  { id: 'energy', name: '能源动力', icon: '🔋', color: '#27ae60',  description: '石油、天然气、新能源技术' },
-  { id: 'legal', name: '法律法务', icon: '⚖️', color: '#7f8c8d',  description: '中俄法律、合同、商务法务' },
-  { id: 'economic', name: '经济贸易', icon: '💰', color: '#f39c12',  description: '国际贸易、金融、市场营销' },
-  { id: 'agricultural', name: '农业科学', icon: '🌾', color: '#2ecc71', description: '农学、畜牧、林业、渔业' },
-  { id: 'environmental', name: '环境科学', icon: '🌍', color: '#3498db',  description: '环境保护、生态工程、污染治理' }
+  { id: 'mechanical', name: '机械工程', icon: '⚙️', color: '#409eff', termCount: 1256, description: '机械设计、制造、自动化相关术语' },
+  { id: 'electrical', name: '电气工程', icon: '⚡', color: '#e6a23c', termCount: 987, description: '电力系统、电子技术、自动化控制' },
+  { id: 'chemical', name: '化学化工', icon: '🧪', color: '#67c23a', termCount: 1542, description: '有机化学、无机化学、化工工艺' },
+  { id: 'medical', name: '医药卫生', icon: '💊', color: '#f56c6c', termCount: 2103, description: '临床医学、药学、生物医学' },
+  { id: 'computer', name: '计算机科学', icon: '💻', color: '#8e44ad', termCount: 1876, description: '软件开发、人工智能、网络技术' },
+  { id: 'construction', name: '建筑工程', icon: '🏗️', color: '#d35400', termCount: 1123, description: '建筑设计、结构工程、施工技术' },
+  { id: 'transport', name: '交通运输', icon: '🚄', color: '#2c3e50', termCount: 865, description: '铁路、公路、航空、水运术语' },
+  { id: 'energy', name: '能源动力', icon: '🔋', color: '#27ae60', termCount: 742, description: '石油、天然气、新能源技术' },
+  { id: 'legal', name: '法律法务', icon: '⚖️', color: '#7f8c8d', termCount: 654, description: '中俄法律、合同、商务法务' },
+  { id: 'economic', name: '经济贸易', icon: '💰', color: '#f39c12', termCount: 921, description: '国际贸易、金融、市场营销' },
+  { id: 'agricultural', name: '农业科学', icon: '🌾', color: '#2ecc71', termCount: 587, description: '农学、畜牧、林业、渔业' },
+  { id: 'environmental', name: '环境科学', icon: '🌍', color: '#3498db', termCount: 432, description: '环境保护、生态工程、污染治理' }
 ])
 
 // 每页展示4张中俄术语卡片
@@ -421,76 +423,70 @@ watch(() => allTerms.value.length, (newLength) => {
 .ru { font-size: 16px; color: #666; line-height: 1.4; }
 
 /* ====================================== */
-/* 【高颜值升级】专业分类卡片样式 */
+/* 【压缩高度】专业分类卡片样式（更紧凑） */
 /* ====================================== */
 .category-section {
-  
-  padding: 50px 35px;
+  padding: 40px 35px;
   border-radius: 16px;
   box-shadow: 0 3px 20px rgba(0,0,0,0.06);
 }
 .category-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  gap: 16px;
 }
 .category-card {
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   border-width: 2px;
   border-style: solid;
   border-color: #eee;
-  border-radius: 16px;
-  padding: 30px 24px;
-  text-align: center;
+  border-radius: 12px;
+  padding: 16px 20px;
   transition: all 0.35s ease;
   cursor: pointer;
   background: #fff;
 }
 .category-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
 /* 图标容器 */
 .category-icon-wrap {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 18px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .category-icon {
-  font-size: 36px;
+  font-size: 24px;
 }
 
-/* 文字 */
+.category-info {
+  flex: 1;
+  margin-left: 12px;
+}
 .category-title {
-  font-size: 19px;
+  font-size: 16px;
   font-weight: 600;
   color: #2c3e50;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 .category-count {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-.category-desc {
   font-size: 13px;
-  color: #7f8c8d;
-  line-height: 1.5;
-  margin-bottom: 20px;
-  min-height: 38px;
+  font-weight: 500;
 }
 
 /* 按钮 */
 .enter-btn {
-  border-radius: 8px;
-  height: 34px;
-  font-size: 13px;
-  font-weight: 500;
+  border-radius: 6px;
+  height: 30px;
+  font-size: 12px;
+  padding: 0 12px;
 }
 
 /* 功能模块 */
