@@ -1,4 +1,5 @@
 <template>
+<Header />
   <div class="category-database">
     <!-- 页面头部 -->
     <div class="page-header">
@@ -140,6 +141,8 @@
 </template>
 
 <script setup>
+import Header from '@/components/Header.vue'
+
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
