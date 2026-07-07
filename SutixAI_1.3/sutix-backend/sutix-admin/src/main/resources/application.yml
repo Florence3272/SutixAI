@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: sutix-admin
+
+mybatis-plus:
+  mapper-locations: classpath*:com/sutix/**/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
