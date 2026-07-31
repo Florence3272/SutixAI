@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sutix.term.mapper.TermMapper">
+    <!-- 联表查询字段（包含分类名称） -->
+    <sql id="BaseTermColumns">
+        t.id, t.name, t.en_name, t.ru_name, t.description, t.category_id,
+        t.create_user, t.create_time, t.update_time,
+        c.category_name as categoryName, u.nickname as createUserName
+    </sql>
+
+    <!-- 分页查询术语（带关键词+分类筛选） -->
+    <select id="selectTermPage" resultType="com.sutix.term.entity.Term">
+        SELECT
+        <include refid="BaseTermColumns"/>
+        FROM term t
+        LEFT JOIN term_category c ON t.category_id = c.id
+        LEFT JOIN sys_user u ON t.create_user = u.id
+        WHERE 1=1
+        <!-- 关键词模糊搜索：匹配中文/俄文术语 -->
+        <if test="keyword != null and keyword != ''">
+            AND (t.name LIKE CONCAT('%', #{keyword}, '%')
+            OR t.ru_name LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <!-- 分类名称筛选 -->
+        <if test="categoryName != null and categoryName != ''">
+            AND c.name LIKE CONCAT('%', #{categoryName}, '%')
+        </if>
+        <!-- 分类ID筛选 -->
+        <if test="categoryId != null">
+            AND t.category_id = #{categoryId}
+        </if>
+        ORDER BY t.create_time DESC
+    </select>
+
+    <!-- 详情查询：根据ID查单条术语（联表） -->
+    <select id="selectTermDetail" resultType="com.sutix.term.entity.Term">
+        SELECT
+        <include refid="BaseTermColumns"/>
+        FROM term t
+        LEFT JOIN term_category c ON t.category_id = c.id
+        LEFT JOIN sys_user u ON t.create_user = u.id
+        WHERE t.id = #{id}
+    </select>
+
+    <select id="getCategoryCount"
+            resultType="com.sutix.term.dto.CategoryCountVO">
+
+        SELECT
+            c.id AS categoryId,
+            c.category_name AS categoryName,
+            COUNT(t.id) AS count
+
+        FROM term_category c
+
+            LEFT JOIN term t
+        ON c.id = t.category_id
+
+        GROUP BY c.id,c.category_name
+
+    </select>
+</mapper>
